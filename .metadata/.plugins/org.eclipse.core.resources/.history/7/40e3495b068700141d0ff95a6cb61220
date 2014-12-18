@@ -150,7 +150,7 @@ public class DataModels {
 			 File[] directoryListing = dir.listFiles();
 			  if (directoryListing != null) {
 			    for (File child : directoryListing) {
-			    	br = new BufferedReader(new FileReader("/home/ubuntu/twitter-analysis/data/tweetsSmall/"+child.getName()));
+			    	br = new BufferedReader(new FileReader("/home/ubuntu/twitter-analysis/data/usersSmall.txt"+child.getName()));
 			    	while ((sCurrentLine = br.readLine()) != null ){
 			    		if(sCurrentLine.contains("Text: ")){
 			    			userTweet.add(sCurrentLine.substring(5).trim());
