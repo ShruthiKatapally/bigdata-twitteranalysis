@@ -52,7 +52,7 @@ public class DataModels {
 			  if (directoryListing != null) {
 			    for (File child : directoryListing) {
 			    	//will get the userID
-			    	br = new BufferedReader(new FileReader("/home/ubuntu/twitter-analysis/data/tweetsSmall/"+child.getName()));
+			    	br = new BufferedReader(new FileReader("C:\\Users\\Rakesh\\Desktop\\I590Project\\data\\tweetsSmall\\"+child.getName()));
 			    	while ((sCurrentLine = br.readLine()) != null ){
 			    		if(sCurrentLine.contains("Text: ")){
 			    			userTweet.add(sCurrentLine.substring(5).trim());
@@ -122,7 +122,7 @@ public class DataModels {
 		 
 		try {
 			String sCurrentLine;
-			br = new BufferedReader(new FileReader("/home/ubuntu/twitter-analysis/data/usersSmall.txt"));
+			br = new BufferedReader(new FileReader("C:\\Users\\Rakesh\\Desktop\\I590Project\\data\\usersSmall.txt"));
 			Mongo mongo = new Mongo("localhost", 27017);
 			DB db = mongo.getDB("test");
 			DBCollection users = db.getCollection("users");
@@ -150,7 +150,7 @@ public class DataModels {
 			  File[] directoryListing = dir.listFiles();
 			  if (directoryListing != null) {
 			    for (File child : directoryListing) {
-			    	br = new BufferedReader(new FileReader("/home/ubuntu/twitter-analysis/data/usersSmall.txt"+child.getName()));
+			    	br = new BufferedReader(new FileReader("C:\\Users\\Rakesh\\Desktop\\I590Project\\data\\tweetsSmall\\"+child.getName()));
 			    	while ((sCurrentLine = br.readLine()) != null ){
 			    		if(sCurrentLine.contains("Text: ")){
 			    			userTweet.add(sCurrentLine.substring(5).trim());

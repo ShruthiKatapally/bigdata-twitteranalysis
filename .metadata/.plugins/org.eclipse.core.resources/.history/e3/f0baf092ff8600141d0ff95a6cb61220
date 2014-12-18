@@ -318,7 +318,7 @@ public class DataModels {
 		
 		
 		System.out.println('\n'+"For checking the correctness of the value returned from the program,"
-		+'\n'+"copy & paste the following commands in Mongo shell, verify the outputs from above.");
+		+'\n'+"copy & paste the following commands in Mongo shell (enter command mongo), verify the outputs from above.");
 		System.out.println('\n'+"get_user_name = function(doc) { return doc.value.User_Name; }"+'\n'
 		+"db.reduced.find({\"value.tweets\" : {$regex : /.*Souzas.*/}}, {_id:0}).map( get_user_name);"+'\n'+"db.reduced.find({\"value.tweets\" : {$regex : /.*Souzas.*/}}, {_id:1})");
 		System.out.println('\n'+"Done");
