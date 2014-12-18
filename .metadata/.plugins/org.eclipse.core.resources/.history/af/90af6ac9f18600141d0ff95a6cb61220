@@ -1,0 +1,330 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+import com.mongodb.AggregationOutput;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.MapReduceCommand;
+import com.mongodb.MapReduceOutput;
+import com.mongodb.Mongo;
+
+
+public class DataModels {
+
+
+	public void referencedDataModel(String queryWord, int test){
+		
+
+		
+		BufferedReader br = null;
+		 
+		try {
+			String sCurrentLine;
+			br = new BufferedReader(new FileReader("C:\\Users\\Rakesh\\Desktop\\I590Project\\data\\usersSmall.txt"));
+			Mongo mongo = new Mongo("localhost", 27017);
+			DB db = mongo.getDB("test");
+			DBCollection users = db.getCollection("users");
+			DBCollection tweets = db.getCollection("tweets");
+			
+			ArrayList<String> userTweet = new ArrayList<String>();
+			
+			while ((sCurrentLine = br.readLine()) != null) {
+				if(sCurrentLine.length()>0){
+				String[] usersInfo = sCurrentLine.split("\\s+");
+				
+				BasicDBObject userInfo = new BasicDBObject();
+				userInfo.put("User_ID", usersInfo[0]);
+				userInfo.put("User_Name", usersInfo[1]);
+				userInfo.put("Friend_Count", usersInfo[2]);
+				
+				users.insert(userInfo);
+				}
+			}
+			
+
+			 File dir = new File("Z:\\projData\\tweetsSmall");
+			  File[] directoryListing = dir.listFiles();
+			  if (directoryListing != null) {
+			    for (File child : directoryListing) {
+			    	//will get the userID
+			    	br = new BufferedReader(new FileReader("C:\\Users\\Rakesh\\Desktop\\I590Project\\data\\tweetsSmall\\"+child.getName()));
+			    	while ((sCurrentLine = br.readLine()) != null ){
+			    		if(sCurrentLine.contains("Text: ")){
+			    			userTweet.add(sCurrentLine.substring(5).trim());
+			    		}
+			    	}
+			    	
+			    	//will get the tweets
+		    		BasicDBObject tweetsDoc = new BasicDBObject();
+			    	tweetsDoc.put("UserID", child.getName());
+			    	tweetsDoc.put("tweets", userTweet);
+			    	
+			    	userTweet = new ArrayList<String>();
+			    	tweets.insert(tweetsDoc);
+			    	
+			    }
+			    
+			    
+			    DBObject match = new BasicDBObject("$match", new BasicDBObject("tweets", new BasicDBObject("$regex", ".*"+queryWord+".*")));
+			    DBObject fields = new BasicDBObject("_id", 0); 
+			    fields.put("UserID", 1);
+			    DBObject project = new BasicDBObject("$project", fields );
+			    
+			    AggregationOutput output = tweets.aggregate( match, project);
+			    if(test == 1){System.out.println("The test result from referenced data model " + output.results().toString());}
+			    if(!output.results().toString().isEmpty()){
+			    	BasicDBObject whereQuery = new BasicDBObject();
+			    	int userCount = 0;
+			    	
+			    	for (DBObject obj : output.results()) {
+
+				        String UserID = obj.get("UserID").toString();
+						whereQuery.put("User_ID", UserID);													
+						DBObject value = users.findOne(whereQuery);
+						userCount++;
+				    }
+			    	System.out.println("Word used by "+userCount+" users.");
+			    }
+			    else{System.out.println("Tweet not found");}
+			    
+			    
+			  } else {
+				  
+				  System.out.println("Cannot find directory");
+			  }
+			
+			  users.drop();
+			  tweets.drop();
+			  
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		finally {
+			try {
+				if (br != null)br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+	}
+
+	
+	public void  embeddedDataModel(String queryWord, int test){
+
+		
+		BufferedReader br = null;
+		 
+		try {
+			String sCurrentLine;
+			br = new BufferedReader(new FileReader("Z:\\projData\\usersSmall.txt"));
+			Mongo mongo = new Mongo("localhost", 27017);
+			DB db = mongo.getDB("test");
+			DBCollection users = db.getCollection("users");
+			DBCollection tweets = db.getCollection("tweets");
+			DBCollection reduced = db.getCollection("reduced");
+			int userCount=0;
+			ArrayList<String> userTweet = new ArrayList<String>();
+			
+			while ((sCurrentLine = br.readLine()) != null) {
+				if(sCurrentLine.length()>0){
+				String[] usersInfo = sCurrentLine.split("\\s+");
+				
+				BasicDBObject userInfo = new BasicDBObject();
+				
+				userInfo.put("User_ID", usersInfo[0]);
+				userInfo.put("User_Name", usersInfo[1]);
+				userInfo.put("Friend_Count", usersInfo[2]);
+				
+				users.insert(userInfo);
+				}
+			}
+			
+			
+			 File dir = new File("Z:\\projData\\tweetsSmall");
+			  File[] directoryListing = dir.listFiles();
+			  if (directoryListing != null) {
+			    for (File child : directoryListing) {
+			    	br = new BufferedReader(new FileReader("Z:\\projData\\tweetsSmall\\"+child.getName()));
+			    	while ((sCurrentLine = br.readLine()) != null ){
+			    		if(sCurrentLine.contains("Text: ")){
+			    			userTweet.add(sCurrentLine.substring(5).trim());
+			    		}
+			    	}
+			    	BasicDBObject tweetsDoc = new BasicDBObject();
+			    	tweetsDoc.put("User_ID", child.getName());
+			    	tweetsDoc.put("tweets", userTweet);
+			    	
+			    	userTweet = new ArrayList<String>();
+			    	tweets.insert(tweetsDoc);
+			    }
+			  }
+			  
+			  
+			  
+			  String map1 = "function() {" + "emit(this.User_ID, {\"User_Name\": this.User_Name, \"tweets\": null});" + "}";
+			  
+			  
+			  String map2 = "function() {" + "emit(this.User_ID, {\"tweets\": this.tweets, \"User_Name\": null});" + "}";
+			  
+			  
+			  String reduce = "function(key, values) {"+
+					  "var result = {\"User_Name\" : \"\" ,\"tweets\" : []};"+
+
+					    "values.forEach(function(value) {"+
+					      "if(value.User_Name !== null) {result.User_Name = value.User_Name;}"+
+
+					      "if(value.tweets !== null) {result.tweets = value.tweets;}"+
+					    "});"+
+
+					    "return result;"+
+					"}";
+			  
+			  MapReduceCommand cmd1 = new MapReduceCommand(users, map1, reduce,  "reduced", MapReduceCommand.OutputType.REDUCE, null);
+			  MapReduceCommand cmd2 = new MapReduceCommand(tweets, map2, reduce,  "reduced", MapReduceCommand.OutputType.REDUCE, null);
+			  
+			  MapReduceOutput out1 = users.mapReduce(cmd1);
+			  MapReduceOutput out2 = tweets.mapReduce(cmd2);
+			  
+			  DBObject regex = new BasicDBObject("$regex", ".*"+queryWord+".*");
+			  DBObject condition = new BasicDBObject("value.tweets",regex);
+			  DBObject match = new BasicDBObject("$match",condition);
+			  
+			  DBObject fields = new BasicDBObject("_id", 0);
+			  fields.put("User_Name", "$value.User_Name");
+			  
+			  DBObject project = new BasicDBObject("$project", fields );
+			  AggregationOutput output = reduced.aggregate(match, project);
+			  if(test == 1){System.out.println("The test result from embedded data model " + output.results());}
+
+		      if(!output.results().toString().isEmpty()){
+				  for (DBObject obj : output.results()) {
+							
+					  try{
+					  		String UserName = obj.get("User_Name").toString();
+							userCount++;
+					  }
+					  catch(Exception e){
+						  userCount++;
+						  continue;
+					  }
+				  }
+		      }
+		      System.out.println("Word used by "+ userCount +" users.");
+		      
+		      
+			     users.drop();
+				 tweets.drop();
+			     if(test != 1){
+			    	 reduced.drop();
+			     }
+			  
+		}
+		
+		catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {;
+				if (br != null)br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+	}
+	
+	
+	
+	public static void main(String args[]){
+		
+		long tStart = System.currentTimeMillis();
+		DataModels r1 = new DataModels();
+		String queryWord = new String();
+		long tEnd, tDelta;
+		double elapsedSecondsLowFrequencyRDM,elapsedSecondsHighFrequencyRDM;
+		double elapsedSecondsLowFrequencyEDM,elapsedSecondsHighFrequencyEDM;
+		int test = 0;
+		
+		System.out.println("Searching Referenced Data Model");
+		System.out.println("_____________________________"+'\n');
+		
+		
+		queryWord = "the";
+		System.out.println("Searching word \""+queryWord+"\""+'\n');
+		r1.referencedDataModel(queryWord, test);
+		tEnd = System.currentTimeMillis();
+		tDelta = tEnd - tStart;
+		elapsedSecondsHighFrequencyRDM = tDelta / 1000.0;
+		tStart = System.currentTimeMillis();
+		queryWord = "abcdef";
+		System.out.println('\n'+"Searching word \""+queryWord+"\""+'\n');
+		r1.referencedDataModel(queryWord, test);
+		tEnd = System.currentTimeMillis();
+		tDelta = tEnd - tStart;
+		elapsedSecondsLowFrequencyRDM = tDelta / 1000.0;
+		
+
+	
+		
+		
+		System.out.println('\n'+"Searching Embedded Data Model");
+		System.out.println("_____________________________"+'\n');
+		
+		
+		tStart = System.currentTimeMillis();
+		queryWord = "the";
+		System.out.println("Searching word \""+queryWord+"\""+'\n');
+		r1.embeddedDataModel(queryWord, test);
+		tEnd = System.currentTimeMillis();
+		tDelta = tEnd - tStart;
+		elapsedSecondsHighFrequencyEDM = tDelta / 1000.0;
+		
+		
+		tStart = System.currentTimeMillis();
+		queryWord = "abcdef";
+		System.out.println('\n'+"Searching word \""+queryWord+"\""+'\n');
+		r1.embeddedDataModel(queryWord, test);
+		tEnd = System.currentTimeMillis();
+		tDelta = tEnd - tStart;
+		elapsedSecondsLowFrequencyEDM = tDelta / 1000.0;
+		
+		
+		System.out.println('\n'+"Results:");
+		System.out.println("_________"+'\n');
+		
+		
+		System.out.println('\n'+"The elapsed time for high frequency word on Referenced Data Model: "+ elapsedSecondsHighFrequencyRDM);
+		System.out.println("The elapsed time for low frequency word on Referenced Data Model: "+ elapsedSecondsLowFrequencyRDM);
+		
+		
+		System.out.println('\n'+"The elapsed time for high frequency word on Embedded Data Model: "+ elapsedSecondsHighFrequencyEDM);
+		System.out.println("The elapsed time for low frequency word on Embedded Data Model: "+ elapsedSecondsLowFrequencyEDM);
+		
+		
+		
+		
+		System.out.println('\n'+"For verification ");
+		System.out.println("_____________________"+'\n');
+		test = 1;
+		queryWord="Souzas";
+		System.out.println("Word searched for "+ queryWord);
+		r1.referencedDataModel(queryWord, test);
+		r1.embeddedDataModel(queryWord, test);
+		
+		
+		System.out.println('\n'+"For checking the correctness of the value returned from the program,"
+		+'\n'+"copy & paste the following commands in Mongo shell, verify the outputs from above.");
+		System.out.println('\n'+"get_user_name = function(doc) { return doc.value.User_Name; }"+'\n'
+		+"db.reduced.find({\"value.tweets\" : {$regex : /.*Souzas.*/}}, {_id:0}).map( get_user_name);"+'\n'+"db.reduced.find({\"value.tweets\" : {$regex : /.*Souzas.*/}}, {_id:1})");
+		System.out.println('\n'+"Done");
+
+	
+	}
+
+
+}
