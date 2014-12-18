@@ -47,7 +47,7 @@ public class DataModels {
 			}
 			
 
-			 File dir = new File("/home/ubuntu/twitter-analysis/data/tweetsSmall");
+			 File dir = new File("Z:\\projData\\tweetsSmall");
 			  File[] directoryListing = dir.listFiles();
 			  if (directoryListing != null) {
 			    for (File child : directoryListing) {
@@ -146,8 +146,8 @@ public class DataModels {
 			}
 			
 			
-			 File dir = new File("/home/ubuntu/twitter-analysis/data/tweetsSmall");
-			 File[] directoryListing = dir.listFiles();
+			 File dir = new File("Z:\\projData\\tweetsSmall");
+			  File[] directoryListing = dir.listFiles();
 			  if (directoryListing != null) {
 			    for (File child : directoryListing) {
 			    	br = new BufferedReader(new FileReader("/home/ubuntu/twitter-analysis/data/usersSmall.txt"+child.getName()));

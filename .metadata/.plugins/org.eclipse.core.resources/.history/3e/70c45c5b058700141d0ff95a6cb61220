@@ -47,7 +47,7 @@ public class DataModels {
 			}
 			
 
-			 File dir = new File("/home/ubuntu/twitter-analysis/data/tweetsSmall");
+			 File dir = new File("Z:\\projData\\tweetsSmall");
 			  File[] directoryListing = dir.listFiles();
 			  if (directoryListing != null) {
 			    for (File child : directoryListing) {
@@ -146,7 +146,7 @@ public class DataModels {
 			}
 			
 			
-			 File dir = new File("/home/ubuntu/twitter-analysis/data/tweetsSmall");
+			 File dir = new File("Z:\\projData\\tweetsSmall");
 			 File[] directoryListing = dir.listFiles();
 			  if (directoryListing != null) {
 			    for (File child : directoryListing) {
