@@ -12,7 +12,7 @@ git clone https://github.com/cloud-class-projects/twitter-analysis.git
 4) Change the directory of the terminal to installer:
 cd twitter-analysis/installer
 
-5) Run the bash script RunScript.bash. This script will install the necessary software to run the project.  
+5) Run the bash script RunScript.bash. This script will install the necessary software to run the project(type Y if prompted): 
 sudo bash ./RunScript.bash
 
 6) CD to twitter-analysis/BigData folder.
@@ -21,8 +21,8 @@ cd .. twitter-analysis/BigData
 7) Now to execute the project enter the below command which is a bundled jar file(if error see step 8).
 java -jar DataModels-Mongo.jar
 
-8) The installation of java has been particularly weird although I have included the command for it in the bash script it sometimes errors out. If it errors out install java again using the command below.(type Y if prompted) Will take some while.
-apt-get install default-jre
+8) The installation of java has been particularly weird although I have included the command for it in the bash script it sometimes errors out. If it errors out install java again using the command below.(type Y if prompted) Will take a while.
+sudo apt-get install default-jre
 
 8) You can run the below command again & again to check for results and performance variations.
 java -jar DataModels-Mongo.jar
