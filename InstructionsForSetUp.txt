@@ -1,0 +1,27 @@
+The instructions are for setting up the project in a new Ubuntu 14.04 VM.
+To complete the installation follow these steps:
+
+1) Open a Ubuntu terminal(the current directory should be home).
+
+2) First we install git. Use the command in the terminal:
+sudo apt-get install git
+
+3) To download the project from GitHub repository use the command:
+git clone https://github.com/cloud-class-projects/twitter-analysis.git
+
+4) Change the directory of the terminal to installer:
+cd installer
+
+5) Run the bash script RunScript.bash.
+
+6) This script will install the necessary software to run the project & will run the project and produce results.  
+sudo bash ./RunScript.bash
+
+7) You can run the below command again to check for results and performance variations.
+java -jar DataModels-Mongo.jar
+
+8) For verifying the program open mongo shell and copy-paste the commands that came from the program output.
+mongo
+
+
+

@@ -11,4 +11,3 @@ cd /home/ubuntu/twitter-analysis/
 
 java -jar DataModels-Mongo.jar
 
-mongo
