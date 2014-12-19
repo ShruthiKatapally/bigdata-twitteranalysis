@@ -102,10 +102,7 @@ public class DataModels {
 			     */
 			    AggregationOutput output = tweets.aggregate( match, project);
 			    if(test == 1){System.out.println("The test result from referenced data model " + output.results().toString());}
-			    
 			    if(!output.results().toString().isEmpty()){
-			    	/*exits after no user is found with the tweet word*/
-			    	
 			    	BasicDBObject whereQuery = new BasicDBObject();
 			    	int userCount = 0;
 			    	
@@ -288,7 +285,6 @@ public class DataModels {
 	public static void main(String args[]){
 		
 		/*Main method with time calculations*/
-		
 		long tStart = System.currentTimeMillis();
 		DataModels r1 = new DataModels();
 		String queryWord = new String();
@@ -354,8 +350,6 @@ public class DataModels {
 		
 		
 		
-		/*The verification can be done using the mongo shell by comparing the values returned from the
-		 * program and the mongo shell results*/ 
 		
 		System.out.println('\n'+"For verification ");
 		System.out.println("_____________________"+'\n');

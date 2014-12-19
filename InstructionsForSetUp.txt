@@ -1,7 +1,7 @@
 The instructions are for setting up the project in a new Ubuntu 14.04 VM.
 To complete the installation and run the program follow these steps:
 
-1) Open a Ubuntu terminal(the current directory should be home).
+1) Open an Ubuntu terminal(the current directory should be home).
 
 2) First we install git. Use the command in the terminal(type Y if prompted):
 sudo apt-get install git
@@ -21,7 +21,7 @@ cd .. twitter-analysis/BigData
 7) Now to execute the project enter the below command which is a bundled jar file(if error see step 8).
 java -jar DataModels-Mongo.jar
 
-8) The installation of java has been particularly weird although I have included the command for it in the bash script it sometimes errors out.If it errors out install java again using the command below.
+8) The installation of java has been particularly weird although I have included the command for it in the bash script it sometimes errors out. If it errors out install java again using the command below.(type Y if prompted) Will take some while.
 apt-get install default-jre
 
 8) You can run the below command again & again to check for results and performance variations.
@@ -29,6 +29,13 @@ java -jar DataModels-Mongo.jar
 
 9) For verifying the program open mongo shell and copy-paste the commands that came from the program output.
 mongo
+
+10) Also in the mongoDB shell we can see the output result of mapreduce after joining two tables:
+db.reduced.find().pretty()
+
+11) Users with tweets can be found in mostly the last documents withing the collection reduced. The command can be used to show more results:
+it
+
 
 
 

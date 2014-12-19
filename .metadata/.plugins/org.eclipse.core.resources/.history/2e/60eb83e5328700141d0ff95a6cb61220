@@ -33,7 +33,7 @@ public class DataModels {
 	
 	public void referencedDataModel(String queryWord, int test){
 		
-		/*searching two collections with a common reference UserID*/
+
 		
 		BufferedReader br = null;
 		 
@@ -102,10 +102,7 @@ public class DataModels {
 			     */
 			    AggregationOutput output = tweets.aggregate( match, project);
 			    if(test == 1){System.out.println("The test result from referenced data model " + output.results().toString());}
-			    
 			    if(!output.results().toString().isEmpty()){
-			    	/*exits after no user is found with the tweet word*/
-			    	
 			    	BasicDBObject whereQuery = new BasicDBObject();
 			    	int userCount = 0;
 			    	
@@ -113,7 +110,7 @@ public class DataModels {
 
 				        String UserID = obj.get("UserID").toString();
 						whereQuery.put("User_ID", UserID);
-						/*the second collection is searched here*/
+						/*the second collecion is searched here*/
 						DBObject value = users.findOne(whereQuery);
 						userCount++;
 				    }
@@ -146,7 +143,6 @@ public class DataModels {
 	
 	public void  embeddedDataModel(String queryWord, int test){
 
-		/*Searching a single collection aggregated using Mongo MapReduce*/
 		
 		BufferedReader br = null;
 		 
@@ -198,16 +194,7 @@ public class DataModels {
 				  System.out.println("Cannot find directory");
 			  }
 			  
-			   /*Map-Reduce JavaScript Functions:
-			   * In MongoDB, map-reduce operations use custom JavaScript functions to map, or associate, 
-			   * values to a key. If a key has multiple values mapped to it, the operation reduces the values 
-			   * for the key to a single object.
-			   * The use of custom JavaScript functions provide flexibility to map-reduce operations. 
-			   * For instance, when processing a document, the map function can create more than one key and 
-			   * value mapping or no mapping. Map-reduce operations can also use a custom JavaScript function to 
-			   * make final modifications to the results at the end of the map and reduce operation, such as perform 
-			   * additional calculations.
-			   */
+			  
 			  
 			  String map1 = "function() {" + "emit(this.User_ID, {\"User_Name\": this.User_Name, \"tweets\": null});" + "}";
 			  
@@ -243,9 +230,6 @@ public class DataModels {
 			  DBObject project = new BasicDBObject("$project", fields );
 			  AggregationOutput output = reduced.aggregate(match, project);
 			  if(test == 1){System.out.println("The test result from embedded data model " + output.results());}
-			  
-			  /*The aggregated result gets us a single collection in a key-value pair format
-			   * key being the _id and values being userName and tweets combination*/
 
 		      if(!output.results().toString().isEmpty()){
 				  for (DBObject obj : output.results()) {
@@ -286,8 +270,6 @@ public class DataModels {
 	
 	
 	public static void main(String args[]){
-		
-		/*Main method with time calculations*/
 		
 		long tStart = System.currentTimeMillis();
 		DataModels r1 = new DataModels();
@@ -354,8 +336,6 @@ public class DataModels {
 		
 		
 		
-		/*The verification can be done using the mongo shell by comparing the values returned from the
-		 * program and the mongo shell results*/ 
 		
 		System.out.println('\n'+"For verification ");
 		System.out.println("_____________________"+'\n');

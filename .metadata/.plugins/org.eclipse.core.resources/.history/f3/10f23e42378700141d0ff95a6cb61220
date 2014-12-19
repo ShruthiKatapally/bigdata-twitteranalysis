@@ -102,10 +102,7 @@ public class DataModels {
 			     */
 			    AggregationOutput output = tweets.aggregate( match, project);
 			    if(test == 1){System.out.println("The test result from referenced data model " + output.results().toString());}
-			    
 			    if(!output.results().toString().isEmpty()){
-			    	/*exits after no user is found with the tweet word*/
-			    	
 			    	BasicDBObject whereQuery = new BasicDBObject();
 			    	int userCount = 0;
 			    	

@@ -102,10 +102,7 @@ public class DataModels {
 			     */
 			    AggregationOutput output = tweets.aggregate( match, project);
 			    if(test == 1){System.out.println("The test result from referenced data model " + output.results().toString());}
-			    
 			    if(!output.results().toString().isEmpty()){
-			    	/*exits after no user is found with the tweet word*/
-			    	
 			    	BasicDBObject whereQuery = new BasicDBObject();
 			    	int userCount = 0;
 			    	
@@ -244,8 +241,7 @@ public class DataModels {
 			  AggregationOutput output = reduced.aggregate(match, project);
 			  if(test == 1){System.out.println("The test result from embedded data model " + output.results());}
 			  
-			  /*The aggregated result gets us a single collection in a key-value pair format
-			   * key being the _id and values being userName and tweets combination*/
+			  /*The aggregated result gets us a single collection in a key-value pair format*/
 
 		      if(!output.results().toString().isEmpty()){
 				  for (DBObject obj : output.results()) {
@@ -286,8 +282,6 @@ public class DataModels {
 	
 	
 	public static void main(String args[]){
-		
-		/*Main method with time calculations*/
 		
 		long tStart = System.currentTimeMillis();
 		DataModels r1 = new DataModels();
@@ -354,8 +348,6 @@ public class DataModels {
 		
 		
 		
-		/*The verification can be done using the mongo shell by comparing the values returned from the
-		 * program and the mongo shell results*/ 
 		
 		System.out.println('\n'+"For verification ");
 		System.out.println("_____________________"+'\n');
