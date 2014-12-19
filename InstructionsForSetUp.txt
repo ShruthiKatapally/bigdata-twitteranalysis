@@ -18,8 +18,11 @@ sudo bash ./RunScript.bash
 6) CD to twitter-analysis/BigData folder.
 cd .. twitter-analysis/BigData
 
-7) Now to execute the project enter the below command which is a bundled jar file.
+7) Now to execute the project enter the below command which is a bundled jar file(if error see step 8).
 java -jar DataModels-Mongo.jar
+
+8) The installation of java has been particularly weird although I have included the command for it in the bash script it sometimes errors out.If it errors out install java again using the command below.
+apt-get install default-jre
 
 8) You can run the below command again & again to check for results and performance variations.
 java -jar DataModels-Mongo.jar
