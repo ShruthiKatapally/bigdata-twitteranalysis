@@ -7,7 +7,3 @@ apt-get install -y mongodb-org
 service mongod start
 
 
-cd /home/ubuntu/twitter-analysis/
-
-java -jar DataModels-Mongo.jar
-
