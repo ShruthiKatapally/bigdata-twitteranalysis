@@ -1,40 +1,46 @@
 The instructions are for setting up the project in a new Ubuntu 14.04 VM.
 To complete the installation and run the program follow these steps:
 
-1) Open an Ubuntu terminal(the current directory should be home).
+1) Open an Ubuntu terminal.
 
 2) First we install git. Use the command in the terminal(type Y if prompted):
-sudo apt-get install git
 
-3) To download the project from GitHub repository use the command:
-git clone https://github.com/cloud-class-projects/twitter-analysis.git
+$sudo apt-get install git
 
-4) Change the directory of the terminal to installer:
-cd twitter-analysis/installer
+3)Create a directory in "home" called "ubuntu".
 
-5) Run the bash script RunScript.bash. This script will install the necessary software to run the project(type Y if prompted): 
-sudo bash ./RunScript.bash
+4) Download the project in "ubuntu" folder from GitHub repository using the below command:
 
-6) CD to twitter-analysis/BigData folder.
-cd .. twitter-analysis/BigData
+$git clone https://github.com/ShruthiKatapally/twitter-analysis
+
+5) Navigate to the folder twitter-analysis/installer:
+
+$cd twitter-analysis/installer
+
+6) Run the bash script RunScript.bash. This script will install the necessary software to run the project(type Y if prompted): 
+
+$sudo bash ./RunScript.bash
 
 7) Now to execute the project enter the below command which is a bundled jar file(if error see step 8).
-java -jar DataModels-Mongo.jar
 
-8) The installation of java has been particularly weird although I have included the command for it in the bash script it sometimes errors out. If it errors out install java again using the command below.(type Y if prompted) Will take a while.
-sudo apt-get install default-jre
+$java -jar DataModels-Mongo.jar
 
-8) You can run the below command again & again to check for results and performance variations.
-java -jar DataModels-Mongo.jar
+8) If you face an error try re-installing the default jre.
 
-9) For verifying the program open mongo shell and copy-paste the commands that came from the program output.
-mongo
+$sudo apt-get install default-jre
 
-10) Also in the mongoDB shell we can see the output result of mapreduce after joining two tables:
-db.reduced.find().pretty()
+Else, the results will be displayed.
 
-11) Users with tweets can be found in mostly the last documents withing the collection reduced. The command can be used to show more results:
-it
+10) For verifying the program open mongo shell and copy-paste the commands that came from the program output.
+
+To start mongo db execute the command: $mongo
+
+11) Also in the mongoDB shell we can see the output result of mapreduce after joining two tables:
+
+>db.reduced.find().pretty()
+
+12) Users with tweets can be found in mostly the last documents withing the collection reduced. The following command can be used to show more results:
+>it
 
 
 
