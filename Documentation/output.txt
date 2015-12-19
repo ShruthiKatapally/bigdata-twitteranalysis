@@ -1,0 +1,49 @@
+Searching Referenced Data Model
+_____________________________
+
+Searching word "the"
+
+Word used by 102 users.
+
+Searching word "abcdef"
+
+Word used by 0 users.
+
+Searching Embedded Data Model
+_____________________________
+
+Searching word "the"
+
+Word used by 102 users.
+
+Searching word "abcdef"
+
+Word used by 0 users.
+
+Results:
+_________
+
+
+The elapsed time for high frequency word on Referenced Data Model: 2.631
+The elapsed time for low frequency word on Referenced Data Model: 0.411
+
+The elapsed time for high frequency word on Embedded Data Model: 0.965
+The elapsed time for low frequency word on Embedded Data Model: 0.643
+
+For verification 
+_____________________
+
+Word searched for Souzas
+The test result from referenced data model [ { "UserID" : "432"}]
+Word used by 1 users.
+The test result from embedded data model [ { "User_Name" : "ErinPattisonn"}]
+Word used by 1 users.
+
+For checking the correctness of the value returned from the program,
+copy & paste the following commands in Mongo shell, verify the outputs from above.
+
+get_user_name = function(doc) { return doc.value.User_Name; }
+db.reduced.find({"value.tweets" : {$regex : /.*Souzas.*/}}, {_id:0}).map( get_user_name);
+db.reduced.find({"value.tweets" : {$regex : /.*Souzas.*/}}, {_id:1})
+
+Done
